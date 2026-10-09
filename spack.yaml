@@ -1,0 +1,22 @@
+# =============================================================================
+#  Spack 环境描述：一键在裸 HPC 集群复现工具链（提示词 P9 第 3 条）
+# =============================================================================
+#  使用：
+#    spack env create cubed_sph spack.yaml
+#    spack env activate cubed_sph
+#    spack install
+# =============================================================================
+
+spack:
+  specs:
+    - cmake@3.24
+    - gcc@11.2.0
+    - openmpi@4.1.4
+    - netcdf-c@4.9.0 +mpi
+    - hdf5@1.12.2 +mpi
+    - yaml-cpp@0.8.0
+    - kokkos@4.0 +cuda    # 如需 GPU 后端
+    - catch2@3.5.0
+  view: true
+  concretizer:
+    unify: true
