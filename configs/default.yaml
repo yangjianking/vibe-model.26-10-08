@@ -1,0 +1,66 @@
+# =============================================================================
+#  立方球 NWP 模式默认配置（default.yaml）
+# =============================================================================
+#  配置分层：default.yaml < site.yaml < case.yaml < 命令行 --set key=value
+#  所有可调参数均在此声明，禁止硬编码。非法配置 fail-fast（JSON Schema 校验）。
+#
+#  参考文献锚点见 docs/theory/ 各文档。
+
+# ---- 网格（立方球水平网格） ----
+grid:
+  type: cubed_sphere        # 水平离散方案：cubed_sphere（本阶段唯一实现）
+  ncells: 48                # 每面板单方向单元数（Cs48；Cs96→96，Cs192→192）
+  nhalo: 3                  # halo 层数（覆盖平流 + 隐式扩散 + 嵌套缓冲）
+  radius: 6371229.0         # 地球半径 [m]
+  stagger: C                # 交错：Arakawa C（默认）/ D
+
+# ---- 垂直坐标 ----
+vertical:
+  type: terrain_following   # terrain_following（地形跟随）| pure_height（纯高度）
+  nlev: 60                  # 垂直层数
+  model_top: 30000.0        # 模式顶高度 [m]
+  # 地形跟随坐标平滑参数（Schär et al. 2002）
+  smoothing_alpha: 1.0
+  smoothing_beta: 1.0
+  smoothing_s: 5.0          # Schär 地形衰减尺度 s（越小地形衰减越快）
+  max_slope: 0.5            # 地形斜率上限（Janjić 1984 判据）
+
+# ---- 时间积分 ----
+timeint:
+  dt: 300.0                 # 大时间步 [s]
+  off_centering: 0.5        # 半隐式 off-centering 参数 α ∈ [0.5, 0.6]
+  semi_implicit: true       # true=半隐式；false=显式 RK3
+  n_split: 1                # 声波子步数（显式路径）
+
+# ---- 动力核心 ----
+dynamics:
+  coriolis_f: 1.0e-4        # 科氏参数参考值 [1/s]（2Ω sinφ₀）
+  damping:
+    divergence_damping: 0.0 # 散度阻尼系数（2 阶 ∇²δ，0=关闭）
+    rayleigh_sponge: true   # 模顶 Rayleigh 海绵层开关
+
+# ---- 物理过程（占位，接口完整） ----
+physics:
+  radiation: false          # 辐射参数化
+  boundary_layer: false     # 边界层参数化
+  microphysics: false       # 微物理参数化
+  gravity_wave_drag: false  # 重力波拖曳
+
+# ---- 并行 ----
+parallel:
+  mpi: true                 # 是否使用 MPI
+  omp_threads: 1            # 每进程 OpenMP 线程数
+  partition: hilbert        # 分区策略：hilbert | morton | metis | block
+
+# ---- I/O ----
+io:
+  format: netcdf            # netcdf | zarr | ascii
+  output_interval: 3600.0   # 输出间隔 [s]
+  compression: 0            # 压缩级别（0=无损 Blosc；>0 有损）
+  io_server_nodes: 0        # I/O 服务器进程数（0=关闭异步 I/O 服务器）
+
+# ---- 运行控制 ----
+run:
+  nsteps: 10                # 积分步数
+  start_time: "2000-01-01T00:00:00Z"
+  output_dir: "./output"

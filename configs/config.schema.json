@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/cubed-sphere-nwp-config.schema.json",
+  "title": "立方球 NWP 模式配置 Schema",
+  "description": "对 configs/*.yaml 的严格校验，非法配置 fail-fast（P9 第 1 条）。",
+  "type": "object",
+  "required": ["grid", "vertical", "timeint", "run"],
+  "properties": {
+    "grid": {
+      "type": "object",
+      "required": ["type", "ncells", "nhalo"],
+      "properties": {
+        "type": { "type": "string", "enum": ["cubed_sphere"] },
+        "ncells": { "type": "integer", "minimum": 1 },
+        "nhalo": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "radius": { "type": "number", "exclusiveMinimum": 0 },
+        "stagger": { "type": "string", "enum": ["C", "D"] }
+      }
+    },
+    "vertical": {
+      "type": "object",
+      "required": ["type", "nlev"],
+      "properties": {
+        "type": { "type": "string", "enum": ["terrain_following", "pure_height"] },
+        "nlev": { "type": "integer", "minimum": 2 },
+        "model_top": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "timeint": {
+      "type": "object",
+      "required": ["dt"],
+      "properties": {
+        "dt": { "type": "number", "exclusiveMinimum": 0 },
+        "off_centering": { "type": "number", "minimum": 0.5, "maximum": 0.6 },
+        "semi_implicit": { "type": "boolean" },
+        "n_split": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "dynamics": {
+      "type": "object",
+      "properties": {
+        "coriolis_f": { "type": "number" }
+      }
+    },
+    "physics": {
+      "type": "object",
+      "properties": {
+        "radiation": { "type": "boolean" },
+        "boundary_layer": { "type": "boolean" },
+        "microphysics": { "type": "boolean" },
+        "gravity_wave_drag": { "type": "boolean" }
+      }
+    },
+    "parallel": {
+      "type": "object",
+      "properties": {
+        "mpi": { "type": "boolean" },
+        "omp_threads": { "type": "integer", "minimum": 1 },
+        "partition": { "type": "string", "enum": ["hilbert", "morton", "metis", "block"] }
+      }
+    },
+    "io": {
+      "type": "object",
+      "properties": {
+        "format": { "type": "string", "enum": ["netcdf", "zarr", "ascii"] },
+        "output_interval": { "type": "number", "exclusiveMinimum": 0 },
+        "compression": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "run": {
+      "type": "object",
+      "required": ["nsteps"],
+      "properties": {
+        "nsteps": { "type": "integer", "minimum": 0 },
+        "start_time": { "type": "string" },
+        "output_dir": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 640" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <title>主程序执行流程图</title>
+  <desc>立方球 NWP 模型主驱动从配置加载到时间积分循环的完整执行流程</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <g>
+    <rect x="190" y="40" width="300" height="56" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+    <text x="340" y="58" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">加载配置 config</text>
+    <text x="340" y="76" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">解析 YAML / 命令行参数</text>
+  </g>
+
+  <g>
+    <rect x="190" y="136" width="300" height="56" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+    <text x="340" y="154" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">构建网格与度量 grid / metric</text>
+    <text x="340" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">6 面板 / gnomonic 投影 / g11 g12 g22</text>
+  </g>
+
+  <g>
+    <rect x="190" y="232" width="300" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+    <text x="340" y="250" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#085041">初始化状态与参考态</text>
+    <text x="340" y="268" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0F6E56">prognostic ρ ρu ρv ρw ρθ + reference_state</text>
+  </g>
+
+  <g>
+    <rect x="190" y="328" width="300" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+    <text x="340" y="346" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3C3489">时间积分主循环 timeint</text>
+    <text x="340" y="364" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534AB7">SSP-RK3 / 半隐式 Crank-Nicolson</text>
+  </g>
+
+  <g>
+    <rect x="120" y="424" width="200" height="56" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+    <text x="220" y="442" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">动力学核 dynamics</text>
+    <text x="220" y="460" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854F0B">Helmholtz 求解 + PPM 平流</text>
+  </g>
+  <g>
+    <rect x="360" y="424" width="200" height="56" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.5"/>
+    <text x="460" y="442" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#72243E">物理参数化 physics</text>
+    <text x="460" y="460" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993556">Held-Suarez 强迫 / 摩擦</text>
+  </g>
+
+  <g>
+    <rect x="190" y="520" width="300" height="56" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+    <text x="340" y="538" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#0C447C">诊断与 I/O</text>
+    <text x="340" y="556" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#185FA5">守恒诊断 + NetCDF 输出 + restart</text>
+  </g>
+
+  <line x1="340" y1="96" x2="340" y2="136" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="192" x2="340" y2="232" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="288" x2="340" y2="328" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="384" x2="340" y2="424" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="220" y1="480" x2="220" y2="520" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="460" y1="480" x2="460" y2="520" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="576" x2="340" y2="600" class="arr" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <path d="M340 600 L340 616 L640 616 L640 352 L490 352" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+  <text x="636" y="608" text-anchor="end" font-size="12" fill="#5F5E5A">循环直至 nsteps</text>
+</svg>
