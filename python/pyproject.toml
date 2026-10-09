@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cubedsphere"
+version = "0.1.0"
+description = "立方球全球大气模式（Cubed-Sphere NWP）Python 后处理包"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Cubed-Sphere NWP Team" }]
+keywords = ["nwp", "cubed-sphere", "atmosphere", "post-processing"]
+
+# 核心功能纯 Python 零依赖；可选依赖按功能分组
+dependencies = []
+
+[project.optional-dependencies]
+# 数据 I/O（NetCDF/Zarr）
+io = ["xarray>=2023.1", "netCDF4>=1.6", "dask>=2023.1"]
+# 绘图
+plot = ["matplotlib>=3.6", "numpy>=1.23"]
+# 配置解析（生产推荐 PyYAML，否则用内置回退）
+yaml = ["PyYAML>=6.0"]
+# 全功能
+all = [
+    "xarray>=2023.1",
+    "netCDF4>=1.6",
+    "dask>=2023.1",
+    "matplotlib>=3.6",
+    "numpy>=1.23",
+    "PyYAML>=6.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cubedsphere*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
